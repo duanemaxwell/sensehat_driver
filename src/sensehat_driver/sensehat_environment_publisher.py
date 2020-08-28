@@ -29,7 +29,7 @@ class SenseHatEnvironmentPublisher:
         self.magnetic_field = self.sensehat_api.get_magnetic_field()
         self.temperature_celsius = self.sensehat_api.get_temperature_celsius()
         self.temperature_fahrenheit = self.sensehat_api.get_temperature_fahrenheit()
-        self.air_pressure = self.sensehat_api.get_air_pressure()
+        self.air_pressure = self.sensehat_api.get_air_pressure()*100.0
         self.relative_humidity = self.sensehat_api.get_relative_humidity()
 
         #populate messages
@@ -43,6 +43,14 @@ class SenseHatEnvironmentPublisher:
         self.air_pressure_msg.fluid_pressure = self.air_pressure
 
         self.relative_humidity_msg.relative_humidity = self.relative_humidity
+
+	#update timestamps
+	stamp = rospy.Time.now()
+	self.magnetic_field_msg.header.stamp = stamp
+	self.temperature_celsius_msg.header.stamp = stamp
+	self.temperature_fahrenheit_msg.header.stamp = stamp
+	self.air_pressure_msg.header.stamp = stamp
+	self.relative_humidity_msg.header.stamp = stamp
 
         #publish messages
         self.magnetic_field_pub.publish(self.magnetic_field_msg)
